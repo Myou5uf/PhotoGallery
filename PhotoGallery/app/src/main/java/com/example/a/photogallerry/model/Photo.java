@@ -2,6 +2,8 @@ package com.example.a.photogallerry.model;
 
 
 import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -23,8 +25,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "width_s"
 })
 
+@Entity
 public class Photo {
 
+    @PrimaryKey
     @NonNull
     @JsonProperty("id")
     private String id;
