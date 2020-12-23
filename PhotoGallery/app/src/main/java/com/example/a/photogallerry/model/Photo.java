@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 })
 
 public class Photo {
-    
+
     @NonNull
     @JsonProperty("id")
     private String id;
