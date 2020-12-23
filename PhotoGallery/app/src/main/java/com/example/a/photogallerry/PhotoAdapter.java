@@ -1,6 +1,5 @@
 package com.example.a.photogallerry;
 
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,7 @@ import java.util.List;
 
 public class PhotoAdapter extends RecyclerView.Adapter <PhotoAdapter.ViewHolder> {
 
-    private View.OnLongClickListener onLongClickListener;
+    private OnClickListener onClickListener;
     private final List<Photo> list_photo;
 
     public PhotoAdapter(List<Photo> items){
@@ -49,13 +48,15 @@ public class PhotoAdapter extends RecyclerView.Adapter <PhotoAdapter.ViewHolder>
         ViewHolder(View view ){
             super(view);
             imageView = view.findViewById(R.id.image);
-            /*imageView.setOnLongClickListener(v -> {
-                onLongClickListener.onLongClickListener(photo.get(getAdapterPosition()));
-                return true;
-            });*/
+            imageView.setOnClickListener(v -> {
+                onClickListener.onClickListener(list_photo.get(getAdapterPosition()));
+            });
         }
+    }
 
 
+    public void setOnClickListener(OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
     }
 
 

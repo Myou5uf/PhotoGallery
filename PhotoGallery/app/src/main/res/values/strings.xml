@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PhotoGallerry</string>
+    <string name="app_name">Галерея</string>
     <string name="itemTitle_Search">Поиск</string>
     <string name="itemTitle_MainPage">Главная страница</string>
     <string name="itemTitle_SavedPhotos">Сохраненные</string>

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Dao;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -16,6 +17,8 @@ import android.widget.SearchView;
 
 import com.example.a.photogallerry.api.FlickrAPI;
 import com.example.a.photogallerry.api.ServiceAPI;
+import com.example.a.photogallerry.db.PhotosDB;
+import com.example.a.photogallerry.db.PhotosDao;
 import com.example.a.photogallerry.model.Photo;
 import com.example.a.photogallerry.model.PhotosResponse;
 import com.example.a.photogallerry.R;
@@ -30,6 +33,7 @@ import retrofit2.Response;
 public class PhotoGallery extends AppCompatActivity {
     private final List<Photo> list_photo = new ArrayList<>();
     private final PhotoAdapter photoAdapter = new PhotoAdapter(list_photo);
+    private PhotosDao photosDao;
 
     private final FlickrAPI flickrAPI = ServiceAPI.getRetrofit().create(FlickrAPI.class);
 
@@ -41,6 +45,7 @@ public class PhotoGallery extends AppCompatActivity {
 
         final RecyclerView recyclerView  = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this,3));
+        photosDao = PhotosDB.getDatabase(getApplicationContext()).photosDao();
 
         flickrAPI.getRecent().enqueue(new Callback<PhotosResponse>() {
             @Override
@@ -52,13 +57,25 @@ public class PhotoGallery extends AppCompatActivity {
             @Override
             public void onFailure(Call<PhotosResponse> call, Throwable t) {
                 AlertDialog alertDialog = new AlertDialog.Builder(PhotoGallery.this).create();
-                alertDialog.setTitle("Info");
-                alertDialog.setMessage("Something went wrong!");
+                alertDialog.setTitle("Внимание!");
+                alertDialog.setMessage("Что-то пошло не так!");
                 alertDialog.show();
             }
         });
         recyclerView.setAdapter(photoAdapter);
+
+        photoAdapter.setOnClickListener(photo -> {
+            photosDao.insertPhoto(photo);
+
+            AlertDialog alertDialog = new AlertDialog.Builder(PhotoGallery.this).create(); //Read Update
+            alertDialog.setTitle("Уведомление");
+            alertDialog.setMessage("Картинка сохранена,!");
+            alertDialog.show();
+        });
+
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -73,6 +90,8 @@ public class PhotoGallery extends AppCompatActivity {
         searchView.setIconifiedByDefault(false);
         return true;
     }
+
+
     protected SearchView.OnQueryTextListener onQueryTextListener = new SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String query) {
@@ -88,8 +107,8 @@ public class PhotoGallery extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<PhotosResponse> call, Throwable t) {
                     AlertDialog alertDialog = new AlertDialog.Builder(PhotoGallery.this).create(); //Read Update
-                    alertDialog.setTitle("Info");
-                    alertDialog.setMessage("Something went wrong!");
+                    alertDialog.setTitle("Внимание");
+                    alertDialog.setMessage("Что-то пошло не так!");
                     alertDialog.show();
                 }
             });
@@ -115,14 +134,16 @@ public class PhotoGallery extends AppCompatActivity {
             @Override
             public void onFailure(Call<PhotosResponse> call, Throwable t) {
                 AlertDialog alertDialog = new AlertDialog.Builder(PhotoGallery.this).create(); //Read Update
-                alertDialog.setTitle("Info");
-                alertDialog.setMessage("Something went wrong!");
+                alertDialog.setTitle("Внимание");
+                alertDialog.setMessage("Что-то пошло не так!");
                 alertDialog.show();
             }
         });
     }
 
     public void onLoadGalleryClick(MenuItem item) {
-
+        list_photo.clear();
+        list_photo.addAll(photosDao.LoadAll());
+        photoAdapter.notifyDataSetChanged();
     }
 }
