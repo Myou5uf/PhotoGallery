@@ -69,7 +69,7 @@ public class PhotoGallery extends AppCompatActivity {
 
             AlertDialog alertDialog = new AlertDialog.Builder(PhotoGallery.this).create(); //Read Update
             alertDialog.setTitle("Уведомление");
-            alertDialog.setMessage("Картинка сохранена,!");
+            alertDialog.setMessage("Картинка сохранена!");
             alertDialog.show();
         });
 

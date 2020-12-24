@@ -3,4 +3,6 @@
     <string name="itemTitle_Search">Поиск</string>
     <string name="itemTitle_MainPage">Главная страница</string>
     <string name="itemTitle_SavedPhotos">Сохраненные</string>
+    <string name="description_imageView">Картинки</string>
+    <string name="imageText_name">Title</string>
 </resources>

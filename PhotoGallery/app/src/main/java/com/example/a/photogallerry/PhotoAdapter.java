@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,6 +36,7 @@ public class PhotoAdapter extends RecyclerView.Adapter <PhotoAdapter.ViewHolder>
         Photo photo = list_photo.get(position);
         Picasso.get().load(photo.getUrlS()).into(holder.imageView);
         holder.itemView.setTag(photo);
+        holder.image_name.setText(photo.getTitle());
     }
 
     @Override
@@ -44,10 +46,12 @@ public class PhotoAdapter extends RecyclerView.Adapter <PhotoAdapter.ViewHolder>
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         final ImageView imageView;
+        final TextView image_name;
 
         ViewHolder(View view ){
             super(view);
             imageView = view.findViewById(R.id.image);
+            image_name = view.findViewById(R.id.image_name);
             imageView.setOnClickListener(v -> {
                 onClickListener.onClickListener(list_photo.get(getAdapterPosition()));
             });
